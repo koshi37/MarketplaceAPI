@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f88fbc0a39c9400fbf128389a913e19e" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="marketplaceModel.ad" Width="1.5" PointX="3" PointY="4" />
+        <EntityTypeShape EntityType="marketplaceModel.category" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="marketplaceModel.comment" Width="1.5" PointX="3" PointY="8.375" />
+        <EntityTypeShape EntityType="marketplaceModel.observed_ad" Width="1.5" PointX="5.25" PointY="1.625" />
+        <EntityTypeShape EntityType="marketplaceModel.reported_post" Width="1.5" PointX="5.25" PointY="4.375" />
+        <EntityTypeShape EntityType="marketplaceModel.user" Width="1.5" PointX="0.75" PointY="3.875" />
+        <AssociationConnector Association="marketplaceModel.ad_category_fk" />
+        <AssociationConnector Association="marketplaceModel.ad_user_fk" />
+        <AssociationConnector Association="marketplaceModel.observed_ad_ibfk_1" />
+        <AssociationConnector Association="marketplaceModel.reported_post_ibfk_2" />
+        <AssociationConnector Association="marketplaceModel.comment_ibfk_1" />
+        <AssociationConnector Association="marketplaceModel.comment_ibfk_2" />
+        <AssociationConnector Association="marketplaceModel.observed_ad_ibfk_2" />
+        <AssociationConnector Association="marketplaceModel.reported_post_ibfk_1" />
+        <EntityTypeShape EntityType="marketplaceModel.province" Width="1.5" PointX="7.375" PointY="0.875" />
+        <AssociationConnector Association="marketplaceModel.ad_ibfk_1" />
+        <EntityTypeShape EntityType="marketplaceModel.message" Width="1.5" PointX="10.5" PointY="4.25" />
+        <AssociationConnector Association="marketplaceModel.message_ibfk_2" />
+        <EntityTypeShape EntityType="marketplaceModel.chat" Width="1.5" PointX="8.25" PointY="4.25" />
+        <AssociationConnector Association="marketplaceModel.chat_ibfk_1" />
+        <AssociationConnector Association="marketplaceModel.chat_ibfk_2" />
+        <AssociationConnector Association="marketplaceModel.chat_ibfk_3" />
+        <AssociationConnector Association="marketplaceModel.message_ibfk_1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

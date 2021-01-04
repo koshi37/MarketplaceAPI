@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketplaceServices", "MarketplaceServices\MarketplaceServices.csproj", "{97AD4E3D-3988-49BD-AB0B-819B4FA55B01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketplaceDataAccess", "MarketplaceDataAccess\MarketplaceDataAccess.csproj", "{FC60F486-8F06-46D1-BEC4-B50D5CA5E36F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{97AD4E3D-3988-49BD-AB0B-819B4FA55B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97AD4E3D-3988-49BD-AB0B-819B4FA55B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97AD4E3D-3988-49BD-AB0B-819B4FA55B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC60F486-8F06-46D1-BEC4-B50D5CA5E36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC60F486-8F06-46D1-BEC4-B50D5CA5E36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC60F486-8F06-46D1-BEC4-B50D5CA5E36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC60F486-8F06-46D1-BEC4-B50D5CA5E36F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,806 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="marketplaceModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ad">
+          <Key>
+            <PropertyRef Name="ad_id" />
+          </Key>
+          <Property Name="ad_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="2500" Nullable="false" />
+          <Property Name="image_url" Type="varchar" MaxLength="200" />
+          <Property Name="price" Type="double" Nullable="false" />
+          <Property Name="date_added" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="province_id" Type="int" Nullable="false" />
+          <Property Name="reserved" Type="bool" Nullable="false" />
+          <Property Name="views" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="chat">
+          <Key>
+            <PropertyRef Name="chat_id" />
+          </Key>
+          <Property Name="chat_id" Type="int" Nullable="false" />
+          <Property Name="ad_id" Type="int" Nullable="false" />
+          <Property Name="seller_id" Type="int" Nullable="false" />
+          <Property Name="buyer_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="author_id" Type="int" Nullable="false" />
+          <Property Name="rating" Type="int" Nullable="false" />
+          <Property Name="date_added" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="text" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="message_id" />
+          </Key>
+          <Property Name="message_id" Type="int" Nullable="false" />
+          <Property Name="chat_id" Type="int" Nullable="false" />
+          <Property Name="author_id" Type="int" Nullable="false" />
+          <Property Name="message_text" Type="text" Nullable="false" />
+          <Property Name="date_added" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="observed_ad">
+          <Key>
+            <PropertyRef Name="observed_id" />
+          </Key>
+          <Property Name="observed_id" Type="int" Nullable="false" />
+          <Property Name="ad_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="province">
+          <Key>
+            <PropertyRef Name="province_id" />
+          </Key>
+          <Property Name="province_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reported_post">
+          <Key>
+            <PropertyRef Name="report_id" />
+          </Key>
+          <Property Name="report_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="ad_id" Type="int" Nullable="false" />
+          <Property Name="reason" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="date_added" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="permissions" Type="int" Nullable="false" />
+          <Property Name="image_url" Type="varchar" MaxLength="200" />
+          <Property Name="phone" Type="varchar" MaxLength="12" />
+          <Property Name="address" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="ad_category_fk">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="ad" Type="Self.ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ad_ibfk_1">
+          <End Role="province" Type="Self.province" Multiplicity="1" />
+          <End Role="ad" Type="Self.ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="province">
+              <PropertyRef Name="province_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="province_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ad_user_fk">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="ad" Type="Self.ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chat_ibfk_1">
+          <End Role="ad" Type="Self.ad" Multiplicity="1" />
+          <End Role="chat" Type="Self.chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chat_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="chat" Type="Self.chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="seller_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chat_ibfk_3">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="chat" Type="Self.chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="buyer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment_ibfk_1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="message_ibfk_1">
+          <End Role="chat" Type="Self.chat" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chat">
+              <PropertyRef Name="chat_id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="chat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="message_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="observed_ad_ibfk_1">
+          <End Role="ad" Type="Self.ad" Multiplicity="1" />
+          <End Role="observed_ad" Type="Self.observed_ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="observed_ad">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="observed_ad_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="observed_ad" Type="Self.observed_ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="observed_ad">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reported_post_ibfk_1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="reported_post" Type="Self.reported_post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="reported_post">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reported_post_ibfk_2">
+          <End Role="ad" Type="Self.ad" Multiplicity="1" />
+          <End Role="reported_post" Type="Self.reported_post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="reported_post">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="marketplaceModelStoreContainer">
+          <EntitySet Name="ad" EntityType="Self.ad" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="category" EntityType="Self.category" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="chat" EntityType="Self.chat" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="comment" EntityType="Self.comment" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="message" EntityType="Self.message" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="observed_ad" EntityType="Self.observed_ad" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="province" EntityType="Self.province" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="reported_post" EntityType="Self.reported_post" Schema="marketplace" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="marketplace" store:Type="Tables" />
+          <AssociationSet Name="ad_category_fk" Association="Self.ad_category_fk">
+            <End Role="category" EntitySet="category" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <AssociationSet Name="ad_ibfk_1" Association="Self.ad_ibfk_1">
+            <End Role="province" EntitySet="province" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <AssociationSet Name="ad_user_fk" Association="Self.ad_user_fk">
+            <End Role="user" EntitySet="user" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <AssociationSet Name="chat_ibfk_1" Association="Self.chat_ibfk_1">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="chat_ibfk_2" Association="Self.chat_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="chat_ibfk_3" Association="Self.chat_ibfk_3">
+            <End Role="user" EntitySet="user" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="comment_ibfk_1" Association="Self.comment_ibfk_1">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="comment_ibfk_2" Association="Self.comment_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="message_ibfk_1" Association="Self.message_ibfk_1">
+            <End Role="chat" EntitySet="chat" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="message_ibfk_2" Association="Self.message_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="observed_ad_ibfk_1" Association="Self.observed_ad_ibfk_1">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="observed_ad" EntitySet="observed_ad" />
+          </AssociationSet>
+          <AssociationSet Name="observed_ad_ibfk_2" Association="Self.observed_ad_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="observed_ad" EntitySet="observed_ad" />
+          </AssociationSet>
+          <AssociationSet Name="reported_post_ibfk_1" Association="Self.reported_post_ibfk_1">
+            <End Role="user" EntitySet="user" />
+            <End Role="reported_post" EntitySet="reported_post" />
+          </AssociationSet>
+          <AssociationSet Name="reported_post_ibfk_2" Association="Self.reported_post_ibfk_2">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="reported_post" EntitySet="reported_post" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="marketplaceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="marketplaceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ad" EntityType="marketplaceModel.ad" />
+          <EntitySet Name="category" EntityType="marketplaceModel.category" />
+          <EntitySet Name="comment" EntityType="marketplaceModel.comment" />
+          <EntitySet Name="observed_ad" EntityType="marketplaceModel.observed_ad" />
+          <EntitySet Name="reported_post" EntityType="marketplaceModel.reported_post" />
+          <EntitySet Name="user" EntityType="marketplaceModel.user" />
+          <AssociationSet Name="ad_category_fk" Association="marketplaceModel.ad_category_fk">
+            <End Role="category" EntitySet="category" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <AssociationSet Name="ad_user_fk" Association="marketplaceModel.ad_user_fk">
+            <End Role="user" EntitySet="user" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <AssociationSet Name="observed_ad_ibfk_1" Association="marketplaceModel.observed_ad_ibfk_1">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="observed_ad" EntitySet="observed_ad" />
+          </AssociationSet>
+          <AssociationSet Name="reported_post_ibfk_2" Association="marketplaceModel.reported_post_ibfk_2">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="reported_post" EntitySet="reported_post" />
+          </AssociationSet>
+          <AssociationSet Name="comment_ibfk_1" Association="marketplaceModel.comment_ibfk_1">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="comment_ibfk_2" Association="marketplaceModel.comment_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="observed_ad_ibfk_2" Association="marketplaceModel.observed_ad_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="observed_ad" EntitySet="observed_ad" />
+          </AssociationSet>
+          <AssociationSet Name="reported_post_ibfk_1" Association="marketplaceModel.reported_post_ibfk_1">
+            <End Role="user" EntitySet="user" />
+            <End Role="reported_post" EntitySet="reported_post" />
+          </AssociationSet>
+          <EntitySet Name="province" EntityType="marketplaceModel.province" />
+          <AssociationSet Name="ad_ibfk_1" Association="marketplaceModel.ad_ibfk_1">
+            <End Role="province" EntitySet="province" />
+            <End Role="ad" EntitySet="ad" />
+          </AssociationSet>
+          <EntitySet Name="message" EntityType="marketplaceModel.message" />
+          <AssociationSet Name="message_ibfk_2" Association="marketplaceModel.message_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <EntitySet Name="chat" EntityType="marketplaceModel.chat" />
+          <AssociationSet Name="chat_ibfk_1" Association="marketplaceModel.chat_ibfk_1">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="chat_ibfk_2" Association="marketplaceModel.chat_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="chat_ibfk_3" Association="marketplaceModel.chat_ibfk_3">
+            <End Role="user" EntitySet="user" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="message_ibfk_1" Association="marketplaceModel.message_ibfk_1">
+            <End Role="chat" EntitySet="chat" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ad">
+          <Key>
+            <PropertyRef Name="ad_id" />
+          </Key>
+          <Property Name="ad_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="2500" FixedLength="false" Unicode="false" />
+          <Property Name="image_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="province_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="chat" Relationship="marketplaceModel.chat_ibfk_1" FromRole="ad" ToRole="chat" />
+          <Property Name="reserved" Type="Boolean" Nullable="false" />
+          <Property Name="views" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="author_id" Type="Int32" Nullable="false" />
+          <Property Name="rating" Type="Int32" Nullable="false" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="text" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="observed_ad">
+          <Key>
+            <PropertyRef Name="observed_id" />
+          </Key>
+          <Property Name="observed_id" Type="Int32" Nullable="false" />
+          <Property Name="ad_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reported_post">
+          <Key>
+            <PropertyRef Name="report_id" />
+          </Key>
+          <Property Name="report_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="ad_id" Type="Int32" Nullable="false" />
+          <Property Name="reason" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="permissions" Type="Int32" Nullable="false" />
+          <Property Name="image_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="chat" Relationship="marketplaceModel.chat_ibfk_2" FromRole="user" ToRole="chat" />
+          <NavigationProperty Name="chat1" Relationship="marketplaceModel.chat_ibfk_3" FromRole="user" ToRole="chat" />
+        </EntityType>
+        <Association Name="ad_category_fk">
+          <End Type="marketplaceModel.category" Role="category" Multiplicity="1" />
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ad_user_fk">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="observed_ad_ibfk_1">
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="1" />
+          <End Type="marketplaceModel.observed_ad" Role="observed_ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="observed_ad">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reported_post_ibfk_2">
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="1" />
+          <End Type="marketplaceModel.reported_post" Role="reported_post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="reported_post">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment_ibfk_1">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment_ibfk_2">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="observed_ad_ibfk_2">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.observed_ad" Role="observed_ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="observed_ad">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reported_post_ibfk_1">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.reported_post" Role="reported_post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="reported_post">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="province">
+          <Key>
+            <PropertyRef Name="province_id" />
+          </Key>
+          <Property Name="province_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="ad_ibfk_1">
+          <End Type="marketplaceModel.province" Role="province" Multiplicity="1" />
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="province">
+              <PropertyRef Name="province_id" />
+            </Principal>
+            <Dependent Role="ad">
+              <PropertyRef Name="province_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="message_id" />
+          </Key>
+          <Property Name="message_id" Type="Int32" Nullable="false" />
+          <Property Name="chat_id" Type="Int32" Nullable="false" />
+          <Property Name="author_id" Type="Int32" Nullable="false" />
+          <Property Name="message_text" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="message_ibfk_2">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.message" Role="message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="chat">
+          <Key>
+            <PropertyRef Name="chat_id" />
+          </Key>
+          <Property Name="chat_id" Type="Int32" Nullable="false" />
+          <Property Name="ad_id" Type="Int32" Nullable="false" />
+          <Property Name="seller_id" Type="Int32" Nullable="false" />
+          <Property Name="buyer_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="message" Relationship="marketplaceModel.message_ibfk_1" FromRole="chat" ToRole="message" />
+        </EntityType>
+        <Association Name="chat_ibfk_1">
+          <End Type="marketplaceModel.ad" Role="ad" Multiplicity="1" />
+          <End Type="marketplaceModel.chat" Role="chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chat_ibfk_2">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.chat" Role="chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="seller_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chat_ibfk_3">
+          <End Type="marketplaceModel.user" Role="user" Multiplicity="1" />
+          <End Type="marketplaceModel.chat" Role="chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="buyer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="message_ibfk_1">
+          <End Type="marketplaceModel.chat" Role="chat" Multiplicity="1" />
+          <End Type="marketplaceModel.message" Role="message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chat">
+              <PropertyRef Name="chat_id" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="chat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="marketplaceModelStoreContainer" CdmEntityContainer="marketplaceEntities">
+          <EntitySetMapping Name="ad">
+            <EntityTypeMapping TypeName="marketplaceModel.ad">
+              <MappingFragment StoreEntitySet="ad">
+                <ScalarProperty Name="views" ColumnName="views" />
+                <ScalarProperty Name="reserved" ColumnName="reserved" />
+                <ScalarProperty Name="province_id" ColumnName="province_id" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="category">
+            <EntityTypeMapping TypeName="marketplaceModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comment">
+            <EntityTypeMapping TypeName="marketplaceModel.comment">
+              <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="author_id" ColumnName="author_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="observed_ad">
+            <EntityTypeMapping TypeName="marketplaceModel.observed_ad">
+              <MappingFragment StoreEntitySet="observed_ad">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+                <ScalarProperty Name="observed_id" ColumnName="observed_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reported_post">
+            <EntityTypeMapping TypeName="marketplaceModel.reported_post">
+              <MappingFragment StoreEntitySet="reported_post">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="report_id" ColumnName="report_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="marketplaceModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="permissions" ColumnName="permissions" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="province">
+            <EntityTypeMapping TypeName="marketplaceModel.province">
+              <MappingFragment StoreEntitySet="province">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="province_id" ColumnName="province_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="message">
+            <EntityTypeMapping TypeName="marketplaceModel.message">
+              <MappingFragment StoreEntitySet="message">
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
+                <ScalarProperty Name="message_text" ColumnName="message_text" />
+                <ScalarProperty Name="author_id" ColumnName="author_id" />
+                <ScalarProperty Name="chat_id" ColumnName="chat_id" />
+                <ScalarProperty Name="message_id" ColumnName="message_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chat">
+            <EntityTypeMapping TypeName="marketplaceModel.chat">
+              <MappingFragment StoreEntitySet="chat">
+                <ScalarProperty Name="buyer_id" ColumnName="buyer_id" />
+                <ScalarProperty Name="seller_id" ColumnName="seller_id" />
+                <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+                <ScalarProperty Name="chat_id" ColumnName="chat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
